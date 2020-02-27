@@ -3,10 +3,12 @@
         <div class="introduction introduction-wrapper" v-bind:class="{'active':introduction_active}">
             <div class="introduction rope"></div>
             <div class="introduction introduction-bar">
-                <div v-for="(introduction,field) in introductions" v-bind:key="field">
-                    <p>{{field}}</p>
-                    <p>{{introduction}}</p><br><br>
-                </div>
+                <slot name="title">
+                    在这里插入标题
+                </slot>
+                <slot name="content">
+                    在这里插入内容
+                </slot>
             </div>
         </div>
         <div class="introduction introduction-trigger" v-bind:class="{'active':introduction_active}">
@@ -25,13 +27,7 @@
         name: "IntroductionPanel",
         data() {
             return{
-                introduction_active: false,
-                introductions: {
-                    '用户名：': '6-20位，可包含英文字母、阿拉伯数字和下划线("_")以及横线("-")，其中，英文字母大小写不敏感。}',
-                    '邮箱：': '邮箱用于接收注册验证码和登录，后期通知也通过该邮箱下发，请输入有效的邮箱地址。',
-                    '验证码：': '6位数字。验证码用于校验输入的邮箱是否属于您本人，验证码有效期为5分钟。',
-                    '密码：': '6-20位字符。密码用于账号登录，请保管好您的密码，不要轻易透露给他人。密码不能包含空格以及，此外无特殊要求。'
-                }
+                introduction_active: false
             }
         },
         methods: {
@@ -44,8 +40,9 @@
 
 <style scoped>
 
-    /*所有元素的动画效果*/
+    /*所有元素的共有效果*/
     .introduction{
+        z-index: 99;
         transition: 0.3s cubic-bezier(.37,1.44,.57,.77);
     }
 
@@ -85,6 +82,7 @@
         border-radius: 5px;/*圆角*/
         background-color: rgba(254, 253, 255, 0.9);/*背景色，白色加透明*/
         box-shadow: 0 7px 25px rgba(0, 0, 0, .3);/*阴影*/
+        overflow: auto;
     }
 
     /*开关整体*/
@@ -121,11 +119,13 @@
         border-radius: 5px;
         text-align: center;
         cursor: pointer;
+        padding-bottom: 8px;
     }
 
-    /*未激活的绳结需要设置底部padding，以抵消箭头旋转后产生的上下偏移*/
-    .introduction.trigger-point:not(.active){
-        padding-bottom: 8px;
+    /*绳结激活状态设置底部padding，以抵消箭头旋转后产生的上下偏移*/
+    .introduction.trigger-point.active{
+        padding-bottom: 3px;
+        padding-top: 3px;
     }
 
     /*绳结下方的提示，未激活时显示*/
